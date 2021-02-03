@@ -1660,7 +1660,7 @@ Siege Whites
                 dito = await ctx.send(embed=embeded)
             except Exception as e:
                 print(f'send embed returned {e}')
-            emojis = ["ballot_box_with_check:806442408287535124", "regional_indicator_x:806442408287535124"]
+            emojis = ['<:ballot_box_with_check:806442408287535124>', '<:regional_indicator_x:806442408287535124>']
             for emoji in emojis:
                 await dito.add_reaction(emoji)
             
