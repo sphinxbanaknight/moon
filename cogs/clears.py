@@ -1557,7 +1557,7 @@ Siege Whites
    Siege Blues```''')
    
     @commands.command()
-    async def test(self, ctx)
+    async def test(self, ctx):
         channel = ctx.message.channel
         commander = ctx.author
         commander_name = commander.name
