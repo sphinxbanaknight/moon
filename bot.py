@@ -185,7 +185,7 @@ async def on_ready():
     #        botinitbkann = channel
 
     print('Bot is online.')
-    await client.change_presence(status=discord.Status.dnd, activity=discord.Game('Getting scolded by Jia'))
+    await client.change_presence(status=discord.Status.dnd, activity=discord.Game('Getting scolded by Ardi'))
 
 
     shit = gc.open('BK ROSTER')
