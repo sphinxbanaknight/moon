@@ -28,7 +28,7 @@ data_json = basedir+'/cogs/client_secret.json'
 creds = ServiceAccountCredentials.from_json_keyfile_name(data_json, scope)
 gc = gspread.authorize(creds)
 
-takte = gc.open('BK ROSTER')
+takte = gc.open('CRESENCE ROSTER')
 rostersheet = takte.worksheet('WoE Roster')
 silk2 = takte.worksheet('WoE Roster 2') 
 silk4 = takte.worksheet('WoE Roster 4')
@@ -188,13 +188,13 @@ async def on_ready():
     await client.change_presence(status=discord.Status.dnd, activity=discord.Game('Getting scolded by Ardi'))
 
 
-    shit = gc.open('BK ROSTER')
+    shit = gc.open('CRESENCE ROSTER')
     try:
         wsheet = shit.worksheet('WoE Roster Archive')
     except gspread.exceptions.WorksheetNotFound:
         await botinitsk.send(f'Could not find 5th sheet in our GSheets, creating one now.')
         await botinitbk.send(f'Could not find 5th sheet in our GSheets, creating one now.')
-        spreadsheet = gc.open('BK ROSTER')
+        spreadsheet = gc.open('CRESENCE ROSTER')
         wsheet = spreadsheet.add_worksheet(title='WoE Roster Archive', rows = 1000, cols = 10)
         kekerino = wsheet.range("A1:J1000")
         for kek in kekerino:
