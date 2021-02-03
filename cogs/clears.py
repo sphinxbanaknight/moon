@@ -27,7 +27,7 @@ data_json = basedir+'/client_secret.json'
 creds = ServiceAccountCredentials.from_json_keyfile_name(data_json, scope)
 gc = gspread.authorize(creds)
 
-shite = gc.open('BK ROSTER')
+shite = gc.open('CRESENCE ROSTER')
 rostersheet = shite.worksheet('WoE Roster')
 celesheet = shite.worksheet('Celery Preferences')
 silk2 = shite.worksheet('WoE Roster 2')
