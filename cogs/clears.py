@@ -1554,7 +1554,122 @@ Zeny
 +10 Dex, +20 Dex
 +10 Luk, +20 Luk
 Siege Whites
-    Siege Blues```''')
+   Siege Blues```''')
+   
+   @commands.command()
+   async def test(self, ctx)
+        channel = ctx.message.channel
+        commander = ctx.author
+        commander_name = commander.name
+        if channel.id in botinit_id:
+            try:
+                row_n = next_available_row(rostersheet, 7, 99)
+            except ValueError:
+                row_n = 3
+            try:
+                row_c = next_available_row(rostersheet, 8, 99)
+            except ValueError:
+                row_c = 3
+            try:
+                row_a = next_available_row(rostersheet, 9, 99)
+            except ValueError:
+                row_a = 3
+            msg = await ctx.send(f'`Please wait... I am parsing a list of our WOE Roster. Refrain from entering any other commands.`')
+            while row_n != row_c or row_n != row_a:
+                row_n = next_available_row(rostersheet, 7, 99)
+                row_c = next_available_row(rostersheet, 8, 99)
+                row_a = next_available_row(rostersheet, 9, 99)
+
+                if row_n < row_c:
+                    if row_n < row_a:
+                        cell_list = rostersheet.range(row_n, 7, row_n, 9)
+                        for cell in cell_list:
+                            cell.value = ""
+                        rostersheet.update_cells(cell_list, value_input_option='USER_ENTERED')
+                    else:
+                        cell_list = rostersheet.range(row_a, 7, row_a, 9)
+                        for cell in cell_list:
+                            cell.value = ""
+                        rostersheet.update_cells(cell_list, value_input_option='USER_ENTERED')
+                elif row_c < row_a:
+                    cell_list = rostersheet.range(row_c, 7, row_c, 9)
+                    for cell in cell_list:
+                        cell.value = ""
+                    rostersheet.update_cells(cell_list, value_input_option='USER_ENTERED')
+                else:
+                    cell_list = rostersheet.range(row_a, 7, row_a, 9)
+                    for cell in cell_list:
+                        cell.value = ""
+                    rostersheet.update_cells(cell_list, value_input_option='USER_ENTERED')
+            try:
+                namae = [item for item in rostersheet.col_values(7) if item and item != 'IGN' and item != 'Next WOE:']
+            except Exception as e:
+                print(f'namae returned {e}')
+            try:
+                kurasu = [item for item in rostersheet.col_values(8) if item and item != 'Class' and item != 'Silk 2' and item != 'Silk 4']
+            except Exception as e:
+                print(f'kurasu returned {e}')
+            try:
+                stat = [item for item in rostersheet.col_values(9) if item and item != 'Att.']
+            except Exception as e:
+                print(f'stat returned {e}')
+            #komento = [item for item in rostersheet.col_values(10) if item and item != 'Comments']
+            x = 0
+            a = 0
+            yuppie = 0
+            noppie = 0
+            for a in stat:
+                if a == 'Yes':
+                    yuppie += 1
+                else:
+                    noppie += 1
+
+            if yuppie == 0 and noppie == 0:
+                await ctx.send(f'`Attendance not found. `\n{feedback_attplz}')
+                await msg.delete()
+                return
+
+            try:
+                embeded = discord.Embed(title = "Current WOE Roster", description = "A list of our Current WOE Roster", color = 0x00FF00)
+            except Exception as e:
+                print(f'discord embed returned {e}')
+                return
+            x = 0
+            fullname = ''
+            fullclass = ''
+            fullstat = ''
+
+            for x in range(len(namae)):
+                fullname += namae[x] + '\n'
+                fullclass += kurasu[x] + '\n'
+                fullstat += stat[x] + '\n'
+            try:
+                embeded.add_field(name="IGN", value=f'{fullname}', inline=True)
+            except Exception as e:
+                print(f'add field returned {e}')
+                return
+            embeded.add_field(name="Class", value=f'{fullclass}', inline=True)
+            try:
+                embeded.add_field(name="Status", value=f'{fullstat}', inline=True)
+            except Exception as e:
+                print(f'add field returned {e}')
+                return
+
+
+            try:
+                await ctx.send(embed=embeded)
+            except Exception as e:
+                print(f'send embed returned {e}')
+            await ctx.send(f'Total no. of Yes answers: {yuppie}')
+            await ctx.send(f'Total no. of No answers: {noppie}')
+            await msg.delete()
+            
+            emojis = [':ballot_box_with_check:', 'regional_indicator_x']
+            for emoji in emojis:
+                await embeded.add_reaction(emoji)
+            
+        else:
+            await ctx.send("Wrong channel! Please use #bot.")
     
     @commands.command()
     async def changerequest(self, ctx, *, arguments):
