@@ -1660,7 +1660,7 @@ Siege Whites
                 dito = await ctx.send(embed=embeded)
             except Exception as e:
                 print(f'send embed returned {e}')
-            emojis = ['<:yespls:806457798397394984>', '<:nopls:806457798136823819>']
+            emojis = ['<:chk:806463073006518272>', '<:crs:806463072881213460>']
             #emojis = [client.get_emoji(806442408287535124), client.get_emoji(806442408287535124)]
             for emoji in emojis:
                 await dito.add_reaction(emoji)
