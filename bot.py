@@ -177,7 +177,7 @@ async def on_ready():
     for server in client.guilds:
         if server.id == sk_server:
             sphinx = server
-        elif server.id == c_server:
+        if server.id == c_server:
             cresence = server
     #    elif server.id == bk_server:
     #        burger = server
