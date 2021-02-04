@@ -5,6 +5,7 @@ import json
 import gspread
 import pprint
 #import models
+import io
 from oauth2client import file as oauth_file, client, tools
 from apiclient.discovery import build
 from httplib2 import Http
