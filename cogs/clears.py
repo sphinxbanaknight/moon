@@ -32,7 +32,7 @@ rostersheet = shite.worksheet('WoE Roster')
 celesheet = shite.worksheet('Celery Preferences')
 silk2 = shite.worksheet('WoE Roster 2')
 silk4 = shite.worksheet('WoE Roster 4')
-crsheet = shite.worksheet('Change Requests')
+#crsheet = shite.worksheet('Change Requests')
 fullofsheet = shite.worksheet('Full IGNs')
 
 ################ Channel, Server, and User IDs ###########################
@@ -154,8 +154,8 @@ def sortsheet(sheet):
             silk2.sort((4, 'des'), (3, 'asc'), (2, 'asc'), range="B4:E51")
         elif sheet == silk4:
             silk4.sort((4, 'des'), (3, 'asc'), (2, 'asc'), range="B4:E51")
-        elif sheet == crsheet:
-            crsheet.sort((5, 'asc'), range="A3:G100")
+        #elif sheet == crsheet:
+            #crsheet.sort((5, 'asc'), range="A3:G100")
         elif sheet == fullofsheet:
             fullofsheet.sort((5, 'asc'), (4, 'asc'), range="B4:H100")
         else:
@@ -1673,105 +1673,105 @@ Siege Whites
         else:
             await ctx.send("Wrong channel! Please use #bot.")
     
-    @commands.command()
-    async def changerequest(self, ctx, *, arguments):
-        channel = ctx.message.channel
-        commander = ctx.author
-        commander_name = commander.name
-        
-        format = "%m/%d/%Y" # google date format
-        my_time = pytz.timezone('Asia/Kuala_Lumpur')
-        my_time_unformatted = datetime.datetime.now(my_time)
-        my_time_formated = my_time_unformatted.strftime(format)
-        
-        if channel.id in botinit_id:
-            arglist = [x.strip() for x in arguments.split(',')]
-            # arg0 = role
-            # arg1 = optional comment
-            
-            no_of_args = len(arglist)
-            if no_of_args == 0:
-                await ctx.send(f'{ctx.message.author.mention} {feedback_properplz}`/changerequest newrole, (optional comment)`')
-                return
-            else:
-                darole = get_jobname(arglist[0])
-                if darole == '':
-                    await ctx.send(f'''Here are the allowed classes: 
-```
-For Doram: {list_doram}
-For Genetic: {list_gene}
-For Mechanic: {list_mech}
-For Minstrel: {list_mins}
-For Ranger: {list_ranger}
-For Sorcerer: {list_sorc}
-For Oboro: {list_obo}
-For Rebellion: {list_rebel}
-For Wanderer: {list_wand}
-```
-                                    ''')
-                    return
-
-                # determine if this is update existing or new entry
-                change = 0
-                next_row = 3
-                cell_list = crsheet.range("A3:A100")
-                for cell in cell_list:
-                    if debugger: await ctx.send(f'{feedback_debug} {next_row} cell.value={cell.value} commander_name={commander_name}')
-                    if cell.value == commander_name:
-                        change = 1
-                        break
-                    elif cell.value == "":
-                        if debugger: await ctx.send(f'{feedback_debug} {commander_name} not found. New entry...')
-                        break
-                    next_row += 1
-                if debugger: await ctx.send(f'{feedback_debug} change={change} next_row={next_row}')
-
-                ## Change Requests format ##
-                # 1 = Discord Tag (user id)
-                # 2 = Enlisted IGN (formula)
-                # 3 = Class (formula)
-                # 4 = Requested Class (arg0)
-                # 5 = Requested On (date stamp)
-                # 6 = Reason (arg1)
-                # 7 = Status (not maintained by bot)
-                count = 0
-                cell_list = crsheet.range(next_row, 1, next_row, 7)
-                for cell in cell_list:
-                    if count == 0:
-                        cell.value = commander_name
-                    elif count == 1:
-                        cell.value = f'=VLOOKUP($A{next_row}, Enlistment, 2, FALSE )'
-                    elif count == 2:
-                        cell.value = f'=VLOOKUP($A{next_row}, Enlistment, 3, FALSE )'
-                    elif count == 3:
-                        cell.value = darole
-                    elif count == 4:
-                        cell.value = my_time_formated
-                    elif count == 5:
-                        if no_of_args > 1:
-                            cell.value = arglist[1]
-                            optionalcomment = f', with Reason: {arglist[1]}'
-                        else:
-                            cell.value = ""
-                            optionalcomment = ""
-                    elif count == 6:
-                        status = "[NEW]"
-                        if change == 1:
-                            cell.value = cell.value + " --> " + status
-                        else:
-                            cell.value = status
-                    count += 1
-                if debugger: await ctx.send(f'{feedback_debug} change={change} next_row={next_row}')
-                crsheet.update_cells(cell_list, value_input_option='USER_ENTERED')
-                await ctx.send(f'```{ctx.author.name} has requested to change to {darole}{optionalcomment} on {my_time_formated}.```')
-                
-                if change == 1:
-                    await ctx.send(f'``` I found your previous change request, I have cleared that.```')
-                    change = 0
-                await autosort(ctx, crsheet)
-        else:
-            await ctx.send("Wrong channel! Please use #bot.")
-            return
+#    @commands.command()
+#    async def changerequest(self, ctx, *, arguments):
+#        channel = ctx.message.channel
+#        commander = ctx.author
+#        commander_name = commander.name
+#        
+#        format = "%m/%d/%Y" # google date format
+#        my_time = pytz.timezone('Asia/Kuala_Lumpur')
+#        my_time_unformatted = datetime.datetime.now(my_time)
+#        my_time_formated = my_time_unformatted.strftime(format)
+#        
+#        if channel.id in botinit_id:
+#            arglist = [x.strip() for x in arguments.split(',')]
+#            # arg0 = role
+#            # arg1 = optional comment
+#            
+#            no_of_args = len(arglist)
+#            if no_of_args == 0:
+#                await ctx.send(f'{ctx.message.author.mention} {feedback_properplz}`/changerequest newrole, (optional comment)`')
+#                return
+#            else:
+#                darole = get_jobname(arglist[0])
+#                if darole == '':
+#                    await ctx.send(f'''Here are the allowed classes: 
+#```
+#For Doram: {list_doram}
+#For Genetic: {list_gene}
+#For Mechanic: {list_mech}
+#For Minstrel: {list_mins}
+#For Ranger: {list_ranger}
+#For Sorcerer: {list_sorc}
+#For Oboro: {list_obo}
+#For Rebellion: {list_rebel}
+#For Wanderer: {list_wand}
+#```
+#                                    ''')
+#                    return
+#
+#                # determine if this is update existing or new entry
+#                change = 0
+#                next_row = 3
+#                cell_list = crsheet.range("A3:A100")
+#                for cell in cell_list:
+#                    if debugger: await ctx.send(f'{feedback_debug} {next_row} cell.value={cell.value} commander_name={commander_name}')
+#                    if cell.value == commander_name:
+#                        change = 1
+#                        break
+#                    elif cell.value == "":
+#                        if debugger: await ctx.send(f'{feedback_debug} {commander_name} not found. New entry...')
+#                        break
+#                    next_row += 1
+#                if debugger: await ctx.send(f'{feedback_debug} change={change} next_row={next_row}')
+#
+#                ## Change Requests format ##
+#                # 1 = Discord Tag (user id)
+#                # 2 = Enlisted IGN (formula)
+#                # 3 = Class (formula)
+#                # 4 = Requested Class (arg0)
+#                # 5 = Requested On (date stamp)
+#                # 6 = Reason (arg1)
+#                # 7 = Status (not maintained by bot)
+#                count = 0
+#                cell_list = crsheet.range(next_row, 1, next_row, 7)
+#                for cell in cell_list:
+#                    if count == 0:
+#                        cell.value = commander_name
+#                    elif count == 1:
+#                        cell.value = f'=VLOOKUP($A{next_row}, Enlistment, 2, FALSE )'
+#                    elif count == 2:
+#                        cell.value = f'=VLOOKUP($A{next_row}, Enlistment, 3, FALSE )'
+#                    elif count == 3:
+#                        cell.value = darole
+#                    elif count == 4:
+#                        cell.value = my_time_formated
+#                    elif count == 5:
+#                        if no_of_args > 1:
+#                            cell.value = arglist[1]
+#                            optionalcomment = f', with Reason: {arglist[1]}'
+#                        else:
+#                            cell.value = ""
+#                            optionalcomment = ""
+#                    elif count == 6:
+#                        status = "[NEW]"
+#                        if change == 1:
+#                            cell.value = cell.value + " --> " + status
+#                        else:
+#                            cell.value = status
+#                    count += 1
+#                if debugger: await ctx.send(f'{feedback_debug} change={change} next_row={next_row}')
+#                crsheet.update_cells(cell_list, value_input_option='USER_ENTERED')
+#                await ctx.send(f'```{ctx.author.name} has requested to change to {darole}{optionalcomment} on {my_time_formated}.```')
+#                
+#                if change == 1:
+#                    await ctx.send(f'``` I found your previous change request, I have cleared that.```')
+#                    change = 0
+#                await autosort(ctx, crsheet)
+#        else:
+#            await ctx.send("Wrong channel! Please use #bot.")
+#            return
 
 
 def setup(client):
