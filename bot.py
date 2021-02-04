@@ -98,6 +98,8 @@ feedback_noangrypingplz = 'to avoid <:AngryPing:703193629489102888> from me, ple
 prefix = ["/"]
 description = "A bot for sheet+discord linking/automation."
 client = commands.Bot(command_prefix = prefix, description = description)
+intents = discord.Intents.all()
+client = discord.Client(intents=intents)
 
 client.remove_command('help')
 
