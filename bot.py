@@ -97,11 +97,12 @@ feedback_noangrypingplz = 'to avoid <:AngryPing:703193629489102888> from me, ple
 
 prefix = ["/"]
 description = "A bot for sheet+discord linking/automation."
-botko = commands.Bot(command_prefix = prefix, description = description)
 intents = discord.Intents.all()
-client = discord.Client(intents=intents)
+client = commands.Bot(command_prefix = prefix, description = description, intents = intents)
 
-botko.remove_command('help')
+
+
+client.remove_command('help')
 
 def istimedeventformat(input):
     try:
@@ -155,7 +156,7 @@ def pinger():
 
 # get debugmode from Clears
 def get_debugmode():
-    clearscog = botko.get_cog('Clears')
+    clearscog = client.get_cog('Clears')
     debugger = clearscog.get_debugmode()
     return debugger
 
@@ -381,24 +382,24 @@ async def on_member_join(member):
         role = discord.utils.get(member.guild.roles, name="new recruit")
     await member.add_roles(role)
         
-@botko.command()
+@client.command()
 async def load(ctx, extension):
     client.load_extension(f'cogs.{extension}')
     await ctx.send(f'Cog: {extension}.py loaded')
 
-@botko.command()
+@client.command()
 async def unload(ctx, extension):
     client.unload_extension(f'cogs.{extension}')
     await ctx.send(f'Cog: {extension}.py unloaded')
 
-@botko.command()
+@client.command()
 async def reload(ctx, extension):
     client.unload_extension(f'cogs.{extension}')
     client.load_extension(f'cogs.{extension}')
     await ctx.send(f'Cog: {extension}.py reloaded')
 
 # toggle isremindenabled
-@botko.command()
+@client.command()
 async def togglereminder(ctx):
     global isremindenabled
     channel = ctx.message.channel
@@ -416,7 +417,7 @@ async def togglereminder(ctx):
         await ctx.send(f'Wrong channel! Please use #bot.')
 
 # Force a timed event run
-@botko.command()
+@client.command()
 async def forcetimedevent(ctx, *, arguments):
     debugger = get_debugmode()
     channel = ctx.message.channel
@@ -484,7 +485,7 @@ e.g. `/forcetimedevent, remind1, 22:00:Tuesday`''')
         await ctx.send(f'Wrong channel! Please use #bot.')
 
 # for testing purpose
-@botko.command()
+@client.command()
 async def jytest(ctx):
     channel = ctx.message.channel
     commander = ctx.author
@@ -514,9 +515,9 @@ async def jytest(ctx):
 
 for filename in os.listdir('./cogs'):
     if filename.endswith('.py'):
-        botko.load_extension(f'cogs.{filename[:-3]}')
+        client.load_extension(f'cogs.{filename[:-3]}')
 
-@botko.event
+@client.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
         await ctx.send('Please pass in all required arguments.')
