@@ -37,22 +37,25 @@ datasheet = takte.worksheet('Data')
 
 ################ Channel, Server, and User IDs ###########################
 sphinx_id = 108381986166431744
-jia_id = 143743232658898944
-#Asi = 127778244383473665
-#Eba = 130885439308431361
-#red = 352073289155346442
-#1may2020 Marte = 437617764484513802
-#giveme5minutes haclime = 127795095121559552
-#crackedvoice marvs = 437618826897522690
-servers = [401186250335322113, 691130488483741756]
+ardi_id = 248681868193562624
+kriss_id = 694307907835134022
+ken_id = 158345623509139456
+jude_id = 693741143313088552
+cell_id = 192286855025262592
+glock_id = 706842108832776223
+#servers = [401186250335322113, 691130488483741756, 800129405350707200]
 sk_server = 401186250335322113
 bk_server = 691130488483741756
-botinit_id = [401212001239564288, 691205255664500757]
+c_server = 800129405350707200
+servers = [sk_server, bk_server, c_server]
+
 sk_bot = 401212001239564288
 bk_bot = 691205255664500757
 bk_ann = 695801936095740024 #BK #announcement
-authorized_id = [sphinx_id, jia_id, 127778244383473665, 130885439308431361, 352073289155346442]
-dev_id = [sphinx_id, jia_id]
+c_bot = 800129405350707200
+botinit_id = [sk_bot, bk_bot, c_bot]
+authorized_id = [sphinx_id, ardi_id, kriss_id, ken_id, jude_id, cell_id, glock_id]
+dev_id = [sphinx_id]
 
 
 ################ Cell placements ################
@@ -174,12 +177,18 @@ async def on_ready():
     for server in client.guilds:
         if server.id == sk_server:
             sphinx = server
+        elif server.id == c_server:
+            cresence = server
     #    elif server.id == bk_server:
     #        burger = server
 
     for channel in sphinx.channels:
         if channel.id == sk_bot:
             botinitsk = channel
+            break
+    for channel in cresence.channels:
+        if channel.id == c_bot:
+            botinitc = channel
             break
     #for channel in burger.channels:
     #    if channel.id == bk_bot:
@@ -196,7 +205,8 @@ async def on_ready():
         wsheet = shit.worksheet('WoE Roster Archive')
     except gspread.exceptions.WorksheetNotFound:
         await botinitsk.send(f'Could not find 5th sheet in our GSheets, creating one now.')
-        await botinitbk.send(f'Could not find 5th sheet in our GSheets, creating one now.')
+        #await botinitbk.send(f'Could not find 5th sheet in our GSheets, creating one now.')
+        await botinitc.send(f'Could not find 5th sheet in our GSheets, creating one now.')
         spreadsheet = gc.open('CRESENCE ROSTER')
         wsheet = spreadsheet.add_worksheet(title='WoE Roster Archive', rows = 1000, cols = 10)
         kekerino = wsheet.range("A1:J1000")
@@ -224,8 +234,8 @@ async def on_ready():
             isarchived = True
             await botinitsk.send('```Automatically cleared the roster! Please use /att y/n, y/n again to register your attendance.```')
             await botinitsk.send('```An archive of the latest roster was saved in WoE Roster Archive Spreadsheet.```')
-            await botinitbk.send('```Automatically cleared the roster! Please use /att y/n, y/n again to register your attendance.```')
-            await botinitbk.send('```An archive of the latest roster was saved in WoE Roster Archive Spreadsheet.```')
+            await botinitc.send('```Automatically cleared the roster! Please use /att y/n, y/n again to register your attendance.```')
+            await botinitc.send('```An archive of the latest roster was saved in WoE Roster Archive Spreadsheet.```')
             try:
                 next_row = next_available_row(wsheet, 1)
             except ValueError as e:
@@ -303,7 +313,7 @@ For those who haven't: {feedback_noangrypingplz}'''
                 if debugger: #send to test server if on debugmode
                     msg1 = await botinitsk.send(msgstr)
                 else:
-                    msg1 = await botinitbkann.send(msgstr)
+                    msg1 = await botinitc.send(msgstr)
                 datasheet.update_cell(2, 9, str(msg1.id) ) # save as string to avoid Excel nr truncation
                 if debugger: await botinitsk.send(f'{feedback_debug} msg1 ID saved: `{msg1.id}`')
             except Exception as e:
@@ -325,10 +335,10 @@ For those who haven't: {feedback_noangrypingplz}'''
                             msg1 = await botinitsk.fetch_message(msgid)
                         else:
                             try: # fetch from announcement or bot
-                                msg1 = await botinitbkann.fetch_message(msgid)
+                                msg1 = await botinitc.fetch_message(msgid)
                             except Exception as e:
                                 try:
-                                    msg1 = await botinitbk.fetch_message(msgid)
+                                    msg1 = await botinitc.fetch_message(msgid)
                                 except Exception as e:
                                     pass
                         await msg1.delete()
@@ -349,7 +359,7 @@ For those who haven't: {feedback_noangrypingplz}'''
                     for discordtag in ping_tags:
                         taglist += '<@' + str(discordtag) + '>, '
                     if taglist != '':
-                        msg1 = await botinitbk.send(f'{feedback_automsg} Hi {taglist}you have not registered your attendance yet. <:peeposad:702156649992945674> Next time, {feedback_noangrypingplz}')
+                        msg1 = await botinitc.send(f'{feedback_automsg} Hi {taglist}you have not registered your attendance yet. <:peeposad:702156649992945674> Next time, {feedback_noangrypingplz}')
                 datasheet.update_cell(2, 9, str(msg1.id) ) # save as string to avoid Excel nr truncation
                 if debugger: await botinitsk.send(f'{feedback_debug} msg1 ID saved: `{msg1.id}`')
             except Exception as e:
