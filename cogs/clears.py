@@ -256,7 +256,7 @@ class Clears(commands.Cog):
 
     @commands.command()
     async def tryto(self, ctx):
-        cols = rostersheet.range(3, column, lastrow, column)
+        cols = rostersheet.range(3, 2, 99, 2)
         print(f'{cols}')
         print(f'{cell.row for cell in cols if cell.value}', file = sys.stdout)
         
