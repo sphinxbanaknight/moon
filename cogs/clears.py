@@ -567,8 +567,9 @@ For Wanderer: {list_wand}
                     else:
                         if not foundignsilk4 or not foundignsilk2:
                             await ctx.send(f'{feedback_attplz}')
-                        if not foundign2:
+                        #if not foundign2:
                             #await ctx.send(f'{feedback_celeryplz}')
+                            
                         change = 0
                 else:
                     await ctx.send(f'{ctx.message.author.mention} {feedback_attplz}')
