@@ -1321,20 +1321,6 @@ PLEASE MIND THE COMMA, IT ENSURES THAT I SEE EVERY ARGUMENT:
 > parses a list of the current attendance list
 **/listpt**
 > parses a list of the current party list divided into ATK, MATK, and SECOND GUILD
-**/celery** `preferences`
-> **zeny, +10 (you can specify which food) , +20 (you can specify which food), whites, blues** = specific salary preferences
-> **everything** = if you prefer all salary
-> **none** = if you want to waive your salary
-> e.g.  `/celery zeny, +10dex, +20dex, +20int` *(opt to get zeny, +10dex, +20dex and +20int foods)*
-**/celeryhelp**
-> lists down available items for salary
-**/listcelery**
-> lists down members' salary preferences
-**/totalcelery**
-> shows the total amount of supplies needed based on everyone's salary preferences
-**/changerequest** `class`, *`optional reason`*
-> files a change request to main a different class. An officer will need some time to process your request, please ask them for updates. 
-> e.g. `/changerequest SC, I want to learn SC`
 **/remind**
 > lists down members who have yet to register their attendance.
 """)
@@ -1421,288 +1407,288 @@ PLEASE MIND THE COMMA, IT ENSURES THAT I SEE EVERY ARGUMENT:
         else:
             await ctx.send("Wrong channel! Please use #bot.")
 
-    @commands.command()
-    async def listcelery(self, ctx):
-        channel = ctx.message.channel
-        commander = ctx.author
-        commander_name = commander.name
-        if channel.id in botinit_id:
-            msg = await ctx.send(f'`Please wait... I am parsing a list of our Salary Preferences List. Refrain from entering any other commands.`')
-            cell_list = celesheet.range("C3:C99")
-            get_ign = [""]
-            for cell in cell_list:
-                get_ign.append(cell.value)
-            cell_list = celesheet.range("D3:D99")
-            get_class = [""]
-            for cell in cell_list:
-                get_class.append(cell.value)
-            cell_list = celesheet.range("T3:T99")
-            get_pref = [""]
-            for cell in cell_list:
-                get_pref.append(cell.value)
-
-            ign = [item for item in get_ign if item]
-            role = [item for item in get_class if item]
-            pref = [item for item in get_pref if item]
-
-            try:
-                embeded = discord.Embed(title="Salary Preferences", description="A list of our Salary Preferences", color=0x00FF00)
-            except Exception as e:
-                printf(f'discord embed retturned {e}')
-                return
-            x = 0
-            ignlist = ''
-            classlist = ''
-            preflist = ''
-
-            no_of_pref = [x.strip() for x in pref[x].split(';')]
-
-            for x in range(len(ign)):
-                ignlist += ign[x] + '\n'
-                no_of_pref = len([x.strip() for x in pref[x].split(';')])
-                #print(f'{x}')
-                #print(f'{ign[x]}')
-                #print(f'{no_of_pref}')
-                if no_of_pref > 6:
-                    ignlist += '\n'
-                    #print('pumasok1')
-                    if no_of_pref > 12:
-                        ignlist += '\n'
-                    #    print('pumasok2')
-            x = 0
-            for x in range(len(role)):
-                classlist += role[x] + '\n'
-                no_of_pref = len([x.strip() for x in pref[x].split(';')])
-                if no_of_pref > 6:
-                    classlist += '\n'
-                    if no_of_pref > 12:
-                        classlist += '\n'
-            x = 0
-            for x in range(len(pref)):
-                preflist += pref[x] + '\n'
-            x = 0
-
-            embeded.add_field(name="IGN", value=f'{ignlist}', inline=True)
-            embeded.add_field(name="CLASS", value=f'{classlist}', inline=True)
-            embeded.add_field(name="PREFERENCES", value=f'{preflist}', inline=True)
-
-            await ctx.send(embed=embeded)
-
-            await msg.delete()
-
-        else:
-            await ctx.send("Wrong channel! Please use #bot.")
-
-    @commands.command()
-    async def totalcelery(self, ctx):
-        channel = ctx.message.channel
-        commander = ctx.author
-        commander_name = commander.name
-        if channel.id in botinit_id:
-            msg = await ctx.send(f'`Please wait... I am parsing a list of our Total Salary Preferences. Refrain from entering any other commands.`')
-            cell_list = celesheet.range("E49:S49")
-
-            count = 0
-            zeny = 0
-            str10 = 0
-            agi10 = 0
-            vit10 = 0
-            int10 = 0
-            dex10 = 0
-            luk10 = 0
-            str20 = 0
-            agi20 = 0
-            vit20 = 0
-            int20 = 0
-            dex20 = 0
-            luk20 = 0
-            whites = 0
-            blues = 0
-
-
-            for cell in cell_list:
-                if count == 0:
-                    zeny = cell.value
-                if count == 1:
-                    str10 = cell.value
-                if count == 2:
-                    agi10 = cell.value
-                if count == 3:
-                    vit10 = cell.value
-                if count == 4:
-                    int10 = cell.value
-                if count == 5:
-                    dex10 = cell.value
-                if count == 6:
-                    luk10 = cell.value
-                if count == 7:
-                    str20 = cell.value
-                if count == 8:
-                    agi20 = cell.value
-                if count == 9:
-                    vit20 = cell.value
-                if count == 10:
-                    int20 = cell.value
-                if count == 11:
-                    dex20 = cell.value
-                if count == 12:
-                    luk20 = cell.value
-                if count == 13:
-                    whites = cell.value
-                if count == 14:
-                    blues = cell.value
-                count += 1
-
-            await ctx.send(f'''```Right now, the guild needs to provide:
-Zeny x {zeny}
-+10 Str x {str10}
-+10 Agi x {agi10}
-+10 Vit x {vit10}
-+10 Int x {int10}
-+10 Dex x {dex10}
-+10 Luk x {luk10}
-+20 Str x {str20}
-+20 Agi x {agi20}
-+20 Vit x {vit20}
-+20 Int x {int20}
-+20 Dex x {dex20}
-+20 Luk x {luk20}
-White Pots x {whites}
-Blue Pots x {blues}```''')
-
-            await msg.delete()
-        else:
-            await ctx.send("Wrong channel! Please use #bot.")
-
-    @commands.command()
-    async def celeryhelp(self, ctx):
-        await ctx.send(f'''```Currently we are giving out the following as salary:
-Zeny
-+10 Str, +20 Str
-+10 Agi, +20 Agi        
-+10 Vit, +20 Vit
-+10 Int, +20 Int
-+10 Dex, +20 Dex
-+10 Luk, +20 Luk
-Siege Whites
-Siege Blues```''')
-   
-    @commands.command()
-    async def testpo(self, ctx):
-        channel = ctx.message.channel
-        commander = ctx.author
-        commander_name = commander.name
-        if channel.id in botinit_id:
-            try:
-                row_n = next_available_row(rostersheet, 7, 99)
-            except ValueError:
-                row_n = 3
-            try:
-                row_c = next_available_row(rostersheet, 8, 99)
-            except ValueError:
-                row_c = 3
-            try:
-                row_a = next_available_row(rostersheet, 9, 99)
-            except ValueError:
-                row_a = 3
-            msg = await ctx.send(f'`Please wait... I am parsing a list of our WOE Roster. Refrain from entering any other commands.`')
-            while row_n != row_c or row_n != row_a:
-                row_n = next_available_row(rostersheet, 7, 99)
-                row_c = next_available_row(rostersheet, 8, 99)
-                row_a = next_available_row(rostersheet, 9, 99)
-
-                if row_n < row_c:
-                    if row_n < row_a:
-                        cell_list = rostersheet.range(row_n, 7, row_n, 9)
-                        for cell in cell_list:
-                            cell.value = ""
-                        rostersheet.update_cells(cell_list, value_input_option='USER_ENTERED')
-                    else:
-                        cell_list = rostersheet.range(row_a, 7, row_a, 9)
-                        for cell in cell_list:
-                            cell.value = ""
-                        rostersheet.update_cells(cell_list, value_input_option='USER_ENTERED')
-                elif row_c < row_a:
-                    cell_list = rostersheet.range(row_c, 7, row_c, 9)
-                    for cell in cell_list:
-                        cell.value = ""
-                    rostersheet.update_cells(cell_list, value_input_option='USER_ENTERED')
-                else:
-                    cell_list = rostersheet.range(row_a, 7, row_a, 9)
-                    for cell in cell_list:
-                        cell.value = ""
-                    rostersheet.update_cells(cell_list, value_input_option='USER_ENTERED')
-            try:
-                namae = [item for item in rostersheet.col_values(7) if item and item != 'IGN' and item != 'Next WOE:']
-            except Exception as e:
-                print(f'namae returned {e}')
-            try:
-                kurasu = [item for item in rostersheet.col_values(8) if item and item != 'Class' and item != 'Silk 2' and item != 'Silk 4']
-            except Exception as e:
-                print(f'kurasu returned {e}')
-            try:
-                stat = [item for item in rostersheet.col_values(9) if item and item != 'Att.']
-            except Exception as e:
-                print(f'stat returned {e}')
-            #komento = [item for item in rostersheet.col_values(10) if item and item != 'Comments']
-            x = 0
-            a = 0
-            yuppie = 0
-            noppie = 0
-            for a in stat:
-                if a == 'Yes':
-                    yuppie += 1
-                else:
-                    noppie += 1
-
-            if yuppie == 0 and noppie == 0:
-                await ctx.send(f'`Attendance not found. `\n{feedback_attplz}')
-                await msg.delete()
-                return
-
-            try:
-                embeded = discord.Embed(title = "Current WOE Roster", description = "A list of our Current WOE Roster", color = 0x00FF00)
-            except Exception as e:
-                print(f'discord embed returned {e}')
-                return
-            x = 0
-            fullname = ''
-            fullclass = ''
-            fullstat = ''
-
-            for x in range(len(namae)):
-                fullname += namae[x] + '\n'
-                fullclass += kurasu[x] + '\n'
-                fullstat += stat[x] + '\n'
-            try:
-                embeded.add_field(name="IGN", value=f'{fullname}', inline=True)
-            except Exception as e:
-                print(f'add field returned {e}')
-                return
-            embeded.add_field(name="Class", value=f'{fullclass}', inline=True)
-            try:
-                embeded.add_field(name="Status", value=f'{fullstat}', inline=True)
-            except Exception as e:
-                print(f'add field returned {e}')
-                return
-
-
-            try:
-                dito = await ctx.send(embed=embeded)
-            except Exception as e:
-                print(f'send embed returned {e}')
-            emojis = ['<:chk:806463073006518272>', '<:crs:806463072881213460>']
-            #emojis = [client.get_emoji(806442408287535124), client.get_emoji(806442408287535124)]
-            for emoji in emojis:
-                await dito.add_reaction(emoji)
-            
-            await ctx.send(f'Total no. of Yes answers: {yuppie}')
-            await ctx.send(f'Total no. of No answers: {noppie}')
-            await msg.delete()
-            
-            
-        else:
-            await ctx.send("Wrong channel! Please use #bot.")
+#    @commands.command()
+#    async def listcelery(self, ctx):
+#        channel = ctx.message.channel
+#        commander = ctx.author
+#        commander_name = commander.name
+#        if channel.id in botinit_id:
+#            msg = await ctx.send(f'`Please wait... I am parsing a list of our Salary Preferences List. Refrain from entering any other commands.`')
+#            cell_list = celesheet.range("C3:C99")
+#            get_ign = [""]
+#            for cell in cell_list:
+#                get_ign.append(cell.value)
+#            cell_list = celesheet.range("D3:D99")
+#            get_class = [""]
+#            for cell in cell_list:
+#                get_class.append(cell.value)
+#            cell_list = celesheet.range("T3:T99")
+#            get_pref = [""]
+#            for cell in cell_list:
+#                get_pref.append(cell.value)
+#
+#            ign = [item for item in get_ign if item]
+#            role = [item for item in get_class if item]
+#            pref = [item for item in get_pref if item]
+#
+#            try:
+#                embeded = discord.Embed(title="Salary Preferences", description="A list of our Salary Preferences", color=0x00FF00)
+#            except Exception as e:
+#                printf(f'discord embed retturned {e}')
+#                return
+#            x = 0
+#            ignlist = ''
+#            classlist = ''
+#            preflist = ''
+#
+#            no_of_pref = [x.strip() for x in pref[x].split(';')]
+#
+#            for x in range(len(ign)):
+#                ignlist += ign[x] + '\n'
+#                no_of_pref = len([x.strip() for x in pref[x].split(';')])
+#                #print(f'{x}')
+#                #print(f'{ign[x]}')
+#                #print(f'{no_of_pref}')
+#                if no_of_pref > 6:
+#                    ignlist += '\n'
+#                    #print('pumasok1')
+#                    if no_of_pref > 12:
+#                        ignlist += '\n'
+#                    #    print('pumasok2')
+#            x = 0
+#            for x in range(len(role)):
+#                classlist += role[x] + '\n'
+#                no_of_pref = len([x.strip() for x in pref[x].split(';')])
+#                if no_of_pref > 6:
+#                    classlist += '\n'
+#                    if no_of_pref > 12:
+#                        classlist += '\n'
+#            x = 0
+#            for x in range(len(pref)):
+#                preflist += pref[x] + '\n'
+#            x = 0
+#
+#            embeded.add_field(name="IGN", value=f'{ignlist}', inline=True)
+#            embeded.add_field(name="CLASS", value=f'{classlist}', inline=True)
+#            embeded.add_field(name="PREFERENCES", value=f'{preflist}', inline=True)
+#
+#            await ctx.send(embed=embeded)
+#
+#            await msg.delete()
+#
+#        else:
+#            await ctx.send("Wrong channel! Please use #bot.")
+#
+#    @commands.command()
+#    async def totalcelery(self, ctx):
+#        channel = ctx.message.channel
+#        commander = ctx.author
+#        commander_name = commander.name
+#        if channel.id in botinit_id:
+#            msg = await ctx.send(f'`Please wait... I am parsing a list of our Total Salary Preferences. Refrain from entering any other commands.`')
+#            cell_list = celesheet.range("E49:S49")
+#
+#            count = 0
+#            zeny = 0
+#            str10 = 0
+#            agi10 = 0
+#            vit10 = 0
+#            int10 = 0
+#            dex10 = 0
+#            luk10 = 0
+#            str20 = 0
+#            agi20 = 0
+#            vit20 = 0
+#            int20 = 0
+#            dex20 = 0
+#            luk20 = 0
+#            whites = 0
+#            blues = 0
+#
+#
+#            for cell in cell_list:
+#                if count == 0:
+#                    zeny = cell.value
+#                if count == 1:
+#                    str10 = cell.value
+#                if count == 2:
+#                    agi10 = cell.value
+#                if count == 3:
+#                    vit10 = cell.value
+#                if count == 4:
+#                    int10 = cell.value
+#                if count == 5:
+#                    dex10 = cell.value
+#                if count == 6:
+#                    luk10 = cell.value
+#                if count == 7:
+#                    str20 = cell.value
+#                if count == 8:
+#                    agi20 = cell.value
+#                if count == 9:
+#                    vit20 = cell.value
+#                if count == 10:
+#                    int20 = cell.value
+#                if count == 11:
+#                    dex20 = cell.value
+#                if count == 12:
+#                    luk20 = cell.value
+#                if count == 13:
+#                    whites = cell.value
+#                if count == 14:
+#                    blues = cell.value
+#                count += 1
+#
+#            await ctx.send(f'''```Right now, the guild needs to provide:
+#Zeny x {zeny}
+#+10 Str x {str10}
+#+10 Agi x {agi10}
+#+10 Vit x {vit10}
+#+10 Int x {int10}
+#+10 Dex x {dex10}
+#+10 Luk x {luk10}
+#+20 Str x {str20}
+#+20 Agi x {agi20}
+#+20 Vit x {vit20}
+#+20 Int x {int20}
+#+20 Dex x {dex20}
+#+20 Luk x {luk20}
+#White Pots x {whites}
+#Blue Pots x {blues}```''')
+#
+#            await msg.delete()
+#        else:
+#            await ctx.send("Wrong channel! Please use #bot.")
+#
+#    @commands.command()
+#    async def celeryhelp(self, ctx):
+#        await ctx.send(f'''```Currently we are giving out the following as salary:
+#Zeny
+#+10 Str, +20 Str
+#+10 Agi, +20 Agi        
+#+10 Vit, +20 Vit
+#+10 Int, +20 Int
+#+10 Dex, +20 Dex
+#+10 Luk, +20 Luk
+#Siege Whites
+#Siege Blues```''')
+#   
+#    @commands.command()
+#    async def testpo(self, ctx):
+#        channel = ctx.message.channel
+#        commander = ctx.author
+#        commander_name = commander.name
+#        if channel.id in botinit_id:
+#            try:
+#                row_n = next_available_row(rostersheet, 7, 99)
+#            except ValueError:
+#                row_n = 3
+#            try:
+#                row_c = next_available_row(rostersheet, 8, 99)
+#            except ValueError:
+#                row_c = 3
+#            try:
+#                row_a = next_available_row(rostersheet, 9, 99)
+#            except ValueError:
+#                row_a = 3
+#            msg = await ctx.send(f'`Please wait... I am parsing a list of our WOE Roster. Refrain from entering any other commands.`')
+#            while row_n != row_c or row_n != row_a:
+#                row_n = next_available_row(rostersheet, 7, 99)
+#                row_c = next_available_row(rostersheet, 8, 99)
+#                row_a = next_available_row(rostersheet, 9, 99)
+#
+#                if row_n < row_c:
+#                    if row_n < row_a:
+#                        cell_list = rostersheet.range(row_n, 7, row_n, 9)
+#                        for cell in cell_list:
+#                            cell.value = ""
+#                        rostersheet.update_cells(cell_list, value_input_option='USER_ENTERED')
+#                    else:
+#                        cell_list = rostersheet.range(row_a, 7, row_a, 9)
+#                        for cell in cell_list:
+#                            cell.value = ""
+#                        rostersheet.update_cells(cell_list, value_input_option='USER_ENTERED')
+#                elif row_c < row_a:
+#                    cell_list = rostersheet.range(row_c, 7, row_c, 9)
+#                    for cell in cell_list:
+#                        cell.value = ""
+#                    rostersheet.update_cells(cell_list, value_input_option='USER_ENTERED')
+#                else:
+#                    cell_list = rostersheet.range(row_a, 7, row_a, 9)
+#                    for cell in cell_list:
+#                        cell.value = ""
+#                    rostersheet.update_cells(cell_list, value_input_option='USER_ENTERED')
+#            try:
+#                namae = [item for item in rostersheet.col_values(7) if item and item != 'IGN' and item != 'Next WOE:']
+#            except Exception as e:
+#                print(f'namae returned {e}')
+#            try:
+#                kurasu = [item for item in rostersheet.col_values(8) if item and item != 'Class' and item != 'Silk 2' and item != 'Silk 4']
+#            except Exception as e:
+#                print(f'kurasu returned {e}')
+#            try:
+#                stat = [item for item in rostersheet.col_values(9) if item and item != 'Att.']
+#            except Exception as e:
+#                print(f'stat returned {e}')
+#            #komento = [item for item in rostersheet.col_values(10) if item and item != 'Comments']
+#            x = 0
+#            a = 0
+#            yuppie = 0
+#            noppie = 0
+#            for a in stat:
+#                if a == 'Yes':
+#                    yuppie += 1
+#                else:
+#                    noppie += 1
+#
+#            if yuppie == 0 and noppie == 0:
+#                await ctx.send(f'`Attendance not found. `\n{feedback_attplz}')
+#                await msg.delete()
+#                return
+#
+#            try:
+#                embeded = discord.Embed(title = "Current WOE Roster", description = "A list of our Current WOE Roster", color = 0x00FF00)
+#            except Exception as e:
+#                print(f'discord embed returned {e}')
+#                return
+#            x = 0
+#            fullname = ''
+#            fullclass = ''
+#            fullstat = ''
+#
+#            for x in range(len(namae)):
+#                fullname += namae[x] + '\n'
+#                fullclass += kurasu[x] + '\n'
+#                fullstat += stat[x] + '\n'
+#            try:
+#                embeded.add_field(name="IGN", value=f'{fullname}', inline=True)
+#            except Exception as e:
+#                print(f'add field returned {e}')
+#                return
+#            embeded.add_field(name="Class", value=f'{fullclass}', inline=True)
+#            try:
+#                embeded.add_field(name="Status", value=f'{fullstat}', inline=True)
+#            except Exception as e:
+#                print(f'add field returned {e}')
+#                return
+#
+#
+#            try:
+#                dito = await ctx.send(embed=embeded)
+#            except Exception as e:
+#                print(f'send embed returned {e}')
+#            emojis = ['<:chk:806463073006518272>', '<:crs:806463072881213460>']
+#            #emojis = [client.get_emoji(806442408287535124), client.get_emoji(806442408287535124)]
+#            for emoji in emojis:
+#                await dito.add_reaction(emoji)
+#            
+#            await ctx.send(f'Total no. of Yes answers: {yuppie}')
+#            await ctx.send(f'Total no. of No answers: {noppie}')
+#            await msg.delete()
+#            
+#            
+#        else:
+#            await ctx.send("Wrong channel! Please use #bot.")
     
 #    @commands.command()
 #    async def changerequest(self, ctx, *, arguments):
