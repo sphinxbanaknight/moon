@@ -481,7 +481,10 @@ For Wanderer: {list_wand}
                     next_row += 1
                 if change == 0:
                     await ctx.send(f'testinggg')
-                    next_row = next_available_row(rostersheet, 2, 99)
+                    try:
+                        next_row = next_available_row(rostersheet, 2, 99)
+                    except Exception as e:
+                        await ctx.send(f'Failed: {e}')
                 await ctx.send(f'test')
                 count = 0
 
