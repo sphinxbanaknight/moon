@@ -1577,7 +1577,7 @@ Zeny
 +10 Dex, +20 Dex
 +10 Luk, +20 Luk
 Siege Whites
-   Siege Blues```''')
+Siege Blues```''')
    
     @commands.command()
     async def testpo(self, ctx):
