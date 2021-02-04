@@ -155,7 +155,7 @@ def pinger():
 
 # get debugmode from Clears
 def get_debugmode():
-    clearscog = client.get_cog('Clears')
+    clearscog = botko.get_cog('Clears')
     debugger = clearscog.get_debugmode()
     return debugger
 
