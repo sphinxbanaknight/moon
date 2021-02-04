@@ -330,12 +330,10 @@ class Clears(commands.Cog):
                 try:
                     msgprogress = await ctx.send('Refreshing Discord IDs for all members in BK Roster...')
                     cell_list = fullofsheet.range("C4:C100")
-                    if debugger:
-                        for cell in cell_list:
-                            await ctx.send(f'{cell.value}')
                     next_row = 4
                     for cell in cell_list:
                         for member in guild.members:
+                            await ctx.send(f'{member}')
                             if cell.value == member.name:
                                 fullofsheet.update_cell(next_row, 2, str(member.id))
                                 if debugger: await ctx.send(f'{feedback_debug} Updating {cell.value} ID at [{next_row}, 2] to {member.id}')
