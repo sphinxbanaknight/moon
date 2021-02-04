@@ -381,24 +381,24 @@ async def on_member_join(member):
         role = discord.utils.get(member.guild.roles, name="new recruit")
     await member.add_roles(role)
         
-@client.command()
+@botko.command()
 async def load(ctx, extension):
     client.load_extension(f'cogs.{extension}')
     await ctx.send(f'Cog: {extension}.py loaded')
 
-@client.command()
+@botko.command()
 async def unload(ctx, extension):
     client.unload_extension(f'cogs.{extension}')
     await ctx.send(f'Cog: {extension}.py unloaded')
 
-@client.command()
+@botko.command()
 async def reload(ctx, extension):
     client.unload_extension(f'cogs.{extension}')
     client.load_extension(f'cogs.{extension}')
     await ctx.send(f'Cog: {extension}.py reloaded')
 
 # toggle isremindenabled
-@client.command()
+@botko.command()
 async def togglereminder(ctx):
     global isremindenabled
     channel = ctx.message.channel
@@ -416,7 +416,7 @@ async def togglereminder(ctx):
         await ctx.send(f'Wrong channel! Please use #bot.')
 
 # Force a timed event run
-@client.command()
+@botko.command()
 async def forcetimedevent(ctx, *, arguments):
     debugger = get_debugmode()
     channel = ctx.message.channel
@@ -484,7 +484,7 @@ e.g. `/forcetimedevent, remind1, 22:00:Tuesday`''')
         await ctx.send(f'Wrong channel! Please use #bot.')
 
 # for testing purpose
-@client.command()
+@botko.command()
 async def jytest(ctx):
     channel = ctx.message.channel
     commander = ctx.author
@@ -516,7 +516,7 @@ for filename in os.listdir('./cogs'):
     if filename.endswith('.py'):
         client.load_extension(f'cogs.{filename[:-3]}')
 
-@client.event
+@botko.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
         await ctx.send('Please pass in all required arguments.')
