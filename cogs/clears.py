@@ -481,7 +481,7 @@ For Wanderer: {list_wand}
                     next_row += 1
                 if change == 0:
                     next_row = next_available_row(rostersheet, 2, 99)
-
+                await ctx.send(f'test')
                 count = 0
 
                 cell_list = rostersheet.range(next_row, 2, next_row, 5)
@@ -500,6 +500,8 @@ For Wanderer: {list_wand}
                             cell.value = ""
                             optionalcomment = ""
                     count += 1
+                    
+                await ctx.send(f'test2')
                 rostersheet.update_cells(cell_list, value_input_option='USER_ENTERED')
                 await ctx.send(f'```{ctx.author.name} has enlisted {darole} with IGN: {arglist[0]}{optionalcomment}.```')
                 if change == 1:
