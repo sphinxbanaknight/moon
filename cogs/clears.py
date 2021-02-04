@@ -333,7 +333,7 @@ class Clears(commands.Cog):
                     next_row = 4
                     for cell in cell_list:
                         for member in guild.members:
-                            await ctx.send(f'{member}')
+                            #await ctx.send(f'{member}')
                             if cell.value == member.name:
                                 fullofsheet.update_cell(next_row, 2, str(member.id))
                                 if debugger: await ctx.send(f'{feedback_debug} Updating {cell.value} ID at [{next_row}, 2] to {member.id}')
