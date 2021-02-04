@@ -126,7 +126,10 @@ feedback_debug = '`[DEBUGINFO] `'
 
 def next_available_row(sheet, column, lastrow):
     cols = sheet.range(3, column, lastrow, column)
-    return max([cell.row for cell in cols if cell.value]) + 1
+    try:
+        return max([cell.row for cell in cols if cell.value]) + 1
+    except Exception as e:
+        return 
 
 
 def next_available_row_p1(sheet, column):
@@ -258,7 +261,11 @@ class Clears(commands.Cog):
     async def tryto(self, ctx):
         cols = rostersheet.range(3, 2, 99, 2)
         #print(f'{cols}')
-        print(f'{cell.row for cell in cols if cell.value}', file = sys.stdout)
+        try:
+            print(f'{max(cell.row for cell in cols if cell.value)}')
+        except Exception as e:
+            print(f'found exception {e}')
+        
         
 
     @commands.command()
