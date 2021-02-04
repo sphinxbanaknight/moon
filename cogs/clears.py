@@ -254,6 +254,12 @@ class Clears(commands.Cog):
         return debugger
 
     @commands.command()
+    async def tryto(self, ctx):
+        cols = rostersheet.range(3, column, lastrow, column)
+        print(f'{cell.row for cell in cols if cell.value})
+        
+
+    @commands.command()
     async def remind(self, ctx):
         ignlist = [item for item in rostersheet.col_values(3) if item and item != 'IGN' and item != 'READ THE NOTES AT [README]']
         global debugger
