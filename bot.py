@@ -173,6 +173,7 @@ async def on_ready():
     global tf_remind1
     global tf_remind2
     global tf_reset
+    global cresence
 
     for server in client.guilds:
         if server.id == sk_server:
